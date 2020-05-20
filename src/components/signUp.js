@@ -11,32 +11,52 @@ import {
   Alert,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {authenticateApi} from '../services/Authenticate/action';
+import {createApi} from '../services/Authenticate/action';
 import {colorConstants, imageConstants} from '../config/constant';
-class Login extends React.Component {
+class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: '',
+      email: 'ridhima259@gmail.com',
+      username: 'abc',
+      password: 'abc',
+      repeatpassword: 'abc',
+      name: 'abc',
+      phonenumber: '9996173124',
       hidePassword: true,
+      hideLowerPassword: true,
     };
   }
 
   render() {
     const {navigation} = this.props.props;
-    const {username, password, hidePassword} = this.state;
+    const {
+      username,
+      password,
+      hideLowerPassword,
+      hidePassword,
+      name,
+      phonenumber,
+    } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upperView} />
         <View style={styles.middleView}>
           <View style={styles.userLogo}>
-            <Image source={imageConstants.user} />
+            <Image source={imageConstants.camera} />
           </View>
           <View style={styles.userView}>
             <TextInput
               style={styles.input}
-              placeholder={'Username or email address'}
+              placeholder={'Email address'}
+              placeholderTextColor={colorConstants.grey}
+              onChangeText={text => this.setState({email: text})}
+            />
+          </View>
+          <View style={styles.userView}>
+            <TextInput
+              style={styles.input}
+              placeholder={'Username'}
               placeholderTextColor={colorConstants.grey}
               onChangeText={text => this.setState({username: text})}
             />
@@ -57,15 +77,32 @@ class Login extends React.Component {
               <Image source={imageConstants.eye} style={styles.eyeView} />
             </TouchableOpacity>
           </View>
-          <View style={styles.crossImage}>
-            <Image source={imageConstants.cross} />
-          </View>
-          <View style={styles.logInView}>
+          <View style={styles.passwordView}>
+            <TextInput
+              placeholder="Repeat Password"
+              placeholderTextColor={colorConstants.grey}
+              onChangeText={text => this.setState({repeatpassword: text})}
+              style={styles.passwordText}
+              secureTextEntry={hideLowerPassword}
+            />
+
             <TouchableOpacity
               onPress={() => {
-                this.props.authenticateApi(
+                this.setState({
+                  hideLowerPassword: !hideLowerPassword,
+                });
+              }}>
+              <Image source={imageConstants.eye} style={styles.eyeView} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.signUpView}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.createApi(
                   username,
                   password,
+                  name,
+                  phonenumber,
                   (status, response, error) => {
                     if (status) {
                       navigation.navigate('Home');
@@ -75,42 +112,16 @@ class Login extends React.Component {
                   },
                 );
               }}>
-              <View style={styles.logInText}>
+              <View style={styles.signUpText}>
                 <Image source={imageConstants.tick} style={styles.tickImage} />
-                <Text style={styles.logtxt}>LOG IN</Text>
+                <Text style={styles.signtxt}>SIGN UP</Text>
               </View>
             </TouchableOpacity>
           </View>
         </View>
         <View style={styles.lowerView}>
           <View style={styles.lowerText}>
-            <Text style={styles.lowerTextStyle}>Login with</Text>
-            <View style={styles.iconsView}>
-              <TouchableOpacity>
-                <Image
-                  style={styles.iconStyle}
-                  source={imageConstants.gplusicon}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  style={styles.iconStyle}
-                  source={imageConstants.giticon}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  style={styles.iconStyle}
-                  source={imageConstants.twittericon}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  style={styles.iconStyle}
-                  source={imageConstants.fbicon}
-                />
-              </TouchableOpacity>
-            </View>
+            <Text style={styles.lowerTextStyle}>Terms of Services</Text>
           </View>
         </View>
       </SafeAreaView>
@@ -129,16 +140,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   middleView: {
-    flex: 6,
+    flex: 7,
     marginHorizontal: 25,
   },
   lowerView: {
     flex: 2,
-  },
-  loginView: {
-    flex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    marginBottom: 20,
   },
   userLogo: {
     alignItems: 'center',
@@ -156,7 +164,7 @@ const styles = StyleSheet.create({
     color: colorConstants.grey,
   },
   passwordView: {
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 14,
     flexDirection: 'row',
     borderBottomColor: colorConstants.grey,
@@ -167,10 +175,6 @@ const styles = StyleSheet.create({
   eyeView: {
     marginTop: 15,
   },
-  crossImage: {
-    alignItems: 'flex-end',
-    marginRight: 30,
-  },
   passwordText: {
     fontSize: 20,
     paddingBottom: 10,
@@ -178,7 +182,7 @@ const styles = StyleSheet.create({
     flex: 0.8,
     color: colorConstants.grey,
   },
-  logInView: {
+  signUpView: {
     backgroundColor: colorConstants.white,
     borderRadius: 40,
     marginHorizontal: 20,
@@ -193,8 +197,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  logInText: {flexDirection: 'row'},
-  logtxt: {
+  signUpText: {flexDirection: 'row'},
+  signtxt: {
     fontSize: 20,
     color: colorConstants.blue,
     paddingVertical: 13,
@@ -205,16 +209,6 @@ const styles = StyleSheet.create({
   lowerTextStyle: {
     color: colorConstants.grey,
   },
-  iconsView: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 20,
-  },
-  iconStyle: {
-    height: 70,
-    width: 70,
-    marginHorizontal: 10,
-  },
 });
 
 const mapStateToProps = state => ({
@@ -222,10 +216,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  authenticateApi: authenticateApi,
+  createApi: createApi,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Login);
+)(SignUp);

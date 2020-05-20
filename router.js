@@ -2,11 +2,13 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Login from './src/components/login';
+import SignUp from './src/components/signUp';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
 import store from './src/services/rootreducer';
 import MainScreen from './src/components/mainScreen';
+import Home from './src/components/home';
 
 const Drawer = createDrawerNavigator();
 
@@ -25,21 +27,21 @@ function myApp() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen
+          {/* <Stack.Screen
             options={{headerShown: false}}
-            name="Login"
-            component={Login}
-          />
+            name="SignUp"
+            component={SignUp}
+          /> */}
           <Stack.Screen
             options={{headerShown: false}}
             name="MainScreen"
             component={MainScreen}
           />
-          {/* <Stack.Screen
-          options={{headerShown: false}}
-          name="Home"
-          component={Home}
-        /> */}
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Home"
+            component={Home}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
