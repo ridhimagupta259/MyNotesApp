@@ -20,12 +20,24 @@ class Login extends React.Component {
       username: '',
       password: '',
       hidePassword: true,
+      usernameValidate: true,
     };
+  }
+  validate(text, type) {
+    var reg = /^\S{4,}$/;
+    if (type === 'username') {
+      if (reg.test(text)) {
+        this.setState({usernameValidate: true});
+        this.setState({username: text});
+      } else {
+        this.setState({usernameValidate: false});
+      }
+    }
   }
 
   render() {
     const {navigation} = this.props.props;
-    const {username, password, hidePassword} = this.state;
+    const {username, password, hidePassword, usernameValidate} = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upperView} />
@@ -33,12 +45,14 @@ class Login extends React.Component {
           <View style={styles.userLogo}>
             <Image source={imageConstants.user} />
           </View>
-          <View style={styles.userView}>
+          <View style={usernameValidate ? styles.input : styles.notValidated}>
             <TextInput
-              style={styles.input}
+              style={styles.textbox}
               placeholder={'Username or email address'}
               placeholderTextColor={colorConstants.grey}
-              onChangeText={text => this.setState({username: text})}
+              onChangeText={text => {
+                this.validate(text, 'username');
+              }}
             />
           </View>
           <View style={styles.passwordView}>
@@ -68,7 +82,7 @@ class Login extends React.Component {
                   password,
                   (status, response, error) => {
                     if (status) {
-                      navigation.navigate('Home');
+                      navigation.navigate('MyDrawer');
                     } else {
                       Alert.alert('Error', 'Wrong Login Credentials');
                     }
@@ -146,15 +160,6 @@ const styles = StyleSheet.create({
   userView: {
     marginTop: 20,
   },
-  input: {
-    fontSize: 20,
-    paddingBottom: 10,
-    borderBottomColor: colorConstants.grey,
-    borderBottomWidth: 1,
-    marginHorizontal: 30,
-    marginTop: 20,
-    color: colorConstants.grey,
-  },
   passwordView: {
     marginTop: 20,
     marginBottom: 14,
@@ -215,11 +220,29 @@ const styles = StyleSheet.create({
     width: 70,
     marginHorizontal: 10,
   },
+  input: {
+    borderBottomColor: colorConstants.grey,
+    borderBottomWidth: 1,
+    marginHorizontal: 30,
+    marginTop: 20,
+  },
+  notValidated: {
+    borderBottomColor: colorConstants.red,
+    borderBottomWidth: 1,
+    marginHorizontal: 30,
+    marginTop: 20,
+  },
+  textbox: {
+    fontSize: 20,
+    paddingBottom: 10,
+    borderBottomColor: colorConstants.white,
+    marginTop: 20,
+    color: colorConstants.grey,
+    height: 40,
+  },
 });
 
-const mapStateToProps = state => ({
-  //flag: state.homeReducer.homeFlag,
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = {
   authenticateApi: authenticateApi,

@@ -8,6 +8,8 @@ export const imageConstants = {
   twittericon: require('../assets/twittericon.png'),
   fbicon: require('../assets/fbicon.png'),
   camera: require('../assets/camera.png'),
+  menu: require('../assets/menu.png'),
+  plus: require('../assets/plus.png'),
 };
 
 export const colorConstants = {
@@ -15,4 +17,6 @@ export const colorConstants = {
   grey: '#737373',
   black: '#000',
   blue: '#7381c4',
+  navyblue:'#373969',
+  red: '#eb2827',
 };

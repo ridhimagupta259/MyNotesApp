@@ -17,15 +17,45 @@ class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'ridhima259@gmail.com',
-      username: 'abc',
-      password: 'abc',
-      repeatpassword: 'abc',
-      name: 'abc',
-      phonenumber: '9996173124',
+      email: '',
+      username: '',
+      password: '',
+      repeatpassword: '',
+      name: '',
+      phonenumber: '',
       hidePassword: true,
       hideLowerPassword: true,
+      emailValidate: true,
+      userValidate: true,
+      passValidate: true,
     };
+  }
+  validate(text, type) {
+    var userNameRegex = /^\S{4,}$/;
+    var passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    var emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+    if (type === 'username') {
+      if (userNameRegex.test(text)) {
+        this.setState({userValidate: true});
+        this.setState({username: text});
+      } else {
+        this.setState({userValidate: false});
+      }
+    } else if (type === 'password') {
+      if (passwordRegex.test(text)) {
+        this.setState({passValidate: true});
+        this.setState({password: text});
+      } else {
+        this.setState({passValidate: false});
+      }
+    } else if (type === 'email') {
+      if (emailRegex.test(text)) {
+        this.setState({emailValidate: true});
+        this.setState({email: text});
+      } else {
+        this.setState({emailValidate: false});
+      }
+    }
   }
 
   render() {
@@ -37,6 +67,9 @@ class SignUp extends React.Component {
       hidePassword,
       name,
       phonenumber,
+      emailValidate,
+      userValidate,
+      passValidate,
     } = this.state;
     return (
       <SafeAreaView style={styles.container}>
@@ -45,27 +78,36 @@ class SignUp extends React.Component {
           <View style={styles.userLogo}>
             <Image source={imageConstants.camera} />
           </View>
-          <View style={styles.userView}>
+          <View style={emailValidate ? styles.input : styles.notValidated}>
             <TextInput
-              style={styles.input}
+              style={styles.textbox}
               placeholder={'Email address'}
               placeholderTextColor={colorConstants.grey}
-              onChangeText={text => this.setState({email: text})}
+              onChangeText={text => {
+                this.validate(text, 'email');
+              }}
             />
           </View>
-          <View style={styles.userView}>
+          <View style={userValidate ? styles.input : styles.notValidated}>
             <TextInput
-              style={styles.input}
+              style={styles.textbox}
               placeholder={'Username'}
               placeholderTextColor={colorConstants.grey}
-              onChangeText={text => this.setState({username: text})}
+              onChangeText={text => {
+                this.validate(text, 'username');
+              }}
             />
           </View>
-          <View style={styles.passwordView}>
+          <View
+            style={
+              passValidate ? styles.passwordView : styles.passnotValidated
+            }>
             <TextInput
               placeholder="Password"
               placeholderTextColor={colorConstants.grey}
-              onChangeText={text => this.setState({password: text})}
+              onChangeText={text => {
+                this.validate(text, 'password');
+              }}
               style={styles.passwordText}
               secureTextEntry={hidePassword}
             />
@@ -105,7 +147,7 @@ class SignUp extends React.Component {
                   phonenumber,
                   (status, response, error) => {
                     if (status) {
-                      navigation.navigate('Home');
+                      navigation.navigate('MyDrawer');
                     } else {
                       Alert.alert('Error', 'Wrong Login Credentials');
                     }
@@ -150,18 +192,6 @@ const styles = StyleSheet.create({
   },
   userLogo: {
     alignItems: 'center',
-  },
-  userView: {
-    marginTop: 20,
-  },
-  input: {
-    fontSize: 20,
-    paddingBottom: 10,
-    borderBottomColor: colorConstants.grey,
-    borderBottomWidth: 1,
-    marginHorizontal: 30,
-    marginTop: 20,
-    color: colorConstants.grey,
   },
   passwordView: {
     marginTop: 10,
@@ -208,6 +238,33 @@ const styles = StyleSheet.create({
   lowerText: {alignItems: 'center'},
   lowerTextStyle: {
     color: colorConstants.grey,
+  },
+  input: {
+    borderBottomColor: colorConstants.grey,
+    borderBottomWidth: 1,
+    marginHorizontal: 30,
+  },
+  notValidated: {
+    borderBottomColor: colorConstants.red,
+    borderBottomWidth: 1,
+    marginHorizontal: 30,
+  },
+  textbox: {
+    fontSize: 20,
+    paddingBottom: 10,
+    borderBottomColor: colorConstants.white,
+    marginTop: 20,
+    color: colorConstants.grey,
+    height: 40,
+  },
+  passnotValidated: {
+    marginTop: 10,
+    marginBottom: 14,
+    flexDirection: 'row',
+    borderBottomColor: colorConstants.red,
+    borderBottomWidth: 1,
+    marginHorizontal: 30,
+    justifyContent: 'space-between',
   },
 });
 
