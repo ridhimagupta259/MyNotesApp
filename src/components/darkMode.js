@@ -1,30 +1,15 @@
-import React from 'react';
-import {
-  View,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
-import {colorConstants} from '../config/constant';
+import {useState} from 'react';
 
-class DarkMode extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toggle: true,
-    };
-  }
-  render() {
-    const {toggle} = this.state;
-    return <SafeAreaView style={styles.container} />;
-  }
-  componentDidMount() {}
-}
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colorConstants.white,
-  },
-});
-export default DarkMode;
+export default () => {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+  };
+
+  return [theme, toggleTheme];
+};

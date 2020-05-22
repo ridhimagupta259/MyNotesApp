@@ -10,18 +10,17 @@ import store from './src/services/rootreducer';
 import MainScreen from './src/components/mainScreen';
 import Home from './src/components/home';
 import DarkMode from './src/components/darkMode';
+import DM from './src/components/dm';
 import Logout from './src/components/logout';
 
-
 const Drawer = createDrawerNavigator();
-
 const Stack = createStackNavigator();
 
 function myDrawer() {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="DarkMode" component={DarkMode} />
+      <Drawer.Screen name="DM" component={DM} />
       <Drawer.Screen name="Logout" component={Logout} />
     </Drawer.Navigator>
   );

@@ -8,6 +8,7 @@ import {
   Image,
 } from 'react-native';
 import {colorConstants, imageConstants} from '../config/constant';
+import DM from './dm';
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -59,7 +60,7 @@ class Home extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colorConstants.white,
+    backgroundColor: DM.theme === 'dark' ? '#000' : '#fff',
   },
   upperView: {
     flex: 2,

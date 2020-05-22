@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import {connect} from 'react-redux';
+import {LoginManager} from 'react-native-fbsdk';
 import {authenticateApi} from '../services/Authenticate/action';
 import {colorConstants, imageConstants} from '../config/constant';
 class Login extends React.Component {
@@ -33,6 +34,24 @@ class Login extends React.Component {
         this.setState({usernameValidate: false});
       }
     }
+  }
+  fbLogin() {
+    console.log('hey');
+    LoginManager.logInWithPermissions(['public_profile']).then(
+      function(result) {
+        if (result.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          console.log(
+            'Login success with permissions: ' +
+              result.grantedPermissions.toString(),
+          );
+        }
+      },
+      function(error) {
+        console.log('Login fail with error: ' + error);
+      },
+    );
   }
 
   render() {
@@ -118,7 +137,7 @@ class Login extends React.Component {
                   source={imageConstants.twittericon}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => this.fbLogin()}>
                 <Image
                   style={styles.iconStyle}
                   source={imageConstants.fbicon}
