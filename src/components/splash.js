@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, AsyncStorage, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
 import {colorConstants} from '../config/constant';
 
@@ -15,7 +16,7 @@ class Splash extends React.Component {
       </View>
     );
   }
-  retrieveData = async () => {
+  getData = async () => {
     const {navigation} = this.props;
     try {
       const value = await AsyncStorage.getItem('id');
@@ -36,7 +37,7 @@ class Splash extends React.Component {
     }
   };
   componentDidMount() {
-    this.retrieveData();
+    this.getData();
   }
 }
 

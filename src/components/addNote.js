@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {colorConstants} from '../config/constant';
 
-class Logout extends React.Component {
+class AddNote extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
     backgroundColor: colorConstants.white,
   },
 });
-export default Logout;
+export default AddNote;

@@ -6,25 +6,40 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  AsyncStorage,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
-import DM from './dm';
+import {selectedType} from '../services/Notes/action';
+import AddNote from './addNote';
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selected: '',
+    };
   }
   storeData = async () => {
     console.log('hey' + this.props.id);
+    const jsonValue = JSON.stringify(this.props.id);
     try {
-      await AsyncStorage.setItem('id', this.props.id);
+      await AsyncStorage.setItem('id', jsonValue);
     } catch (error) {
-      console.warn('error while logging out');
+      console.warn('error');
     }
   };
+  onClick() {
+    this.props.navigation.navigate('DisplayNotes');
+    this.props.selectedType(this.state.selectedCategory);
+  }
   render() {
+    const {
+      personalCount,
+      workCount,
+      ideasCount,
+      listCount,
+      navigation,
+    } = this.props;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upperView}>
@@ -34,22 +49,44 @@ class Home extends React.Component {
           </View>
         </View>
         <View style={styles.middleView}>
-          <View style={styles.categoryView}>
-            <Text style={styles.categoryText}>Personal</Text>
-            <Text style={styles.categoryText}>0</Text>
-          </View>
-          <View style={styles.categoryView}>
-            <Text style={styles.categoryText}>Work</Text>
-            <Text style={styles.categoryText}>0</Text>
-          </View>
-          <View style={styles.categoryView}>
-            <Text style={styles.categoryText}>Ideas</Text>
-            <Text style={styles.categoryText}>0</Text>
-          </View>
-          <View style={styles.categoryView}>
-            <Text style={styles.categoryText}>List</Text>
-            <Text style={styles.categoryText}>0</Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({selectedCategory: 'Personal'}, () =>
+                this.onClick(),
+              );
+            }}>
+            <View style={styles.categoryView}>
+              <Text style={styles.categoryText}>Personal</Text>
+              <Text style={styles.categoryText}>{personalCount}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({selectedCategory: 'Work'}, () => this.onClick());
+            }}>
+            <View style={styles.categoryView}>
+              <Text style={styles.categoryText}>Work</Text>
+              <Text style={styles.categoryText}>{workCount}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({selectedCategory: 'Ideas'}, () => this.onClick());
+            }}>
+            <View style={styles.categoryView}>
+              <Text style={styles.categoryText}>Ideas</Text>
+              <Text style={styles.categoryText}>{ideasCount}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({selectedCategory: 'List'}, () => this.onClick());
+            }}>
+            <View style={styles.categoryView}>
+              <Text style={styles.categoryText}>List</Text>
+              <Text style={styles.categoryText}>{listCount}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.lowerView}>
           <View style={styles.imageView}>
@@ -57,7 +94,7 @@ class Home extends React.Component {
               onPress={() => this.props.navigation.toggleDrawer()}>
               <Image source={imageConstants.menu} />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('AddNote')}>
               <Image source={imageConstants.plus} style={styles.plusImage} />
             </TouchableOpacity>
           </View>
@@ -72,7 +109,7 @@ class Home extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DM.theme === 'dark' ? '#000' : '#fff',
+    backgroundColor: colorConstants.white,
   },
   upperView: {
     flex: 2,
@@ -124,8 +161,14 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = state => ({
   id: state.authenticateReducer.id,
+  personalCount: state.notesReducer.personalCount,
+  workCount: state.notesReducer.workCount,
+  ideasCount: state.notesReducer.ideasCount,
+  listCount: state.notesReducer.listCount,
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  selectedType: selectedType,
+};
 
 export default connect(
   mapStateToProps,

@@ -1,43 +1,64 @@
 import React from 'react';
+import {Alert} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import Login from './src/components/login';
-import SignUp from './src/components/signUp';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
 import store from './src/services/rootreducer';
 import MainScreen from './src/components/mainScreen';
 import Home from './src/components/home';
-import DarkMode from './src/components/darkMode';
 import DM from './src/components/dm';
-import Logout from './src/components/logout';
 import Splash from './src/components/splash';
+import AddNote from './src/components/addNote';
 
+import DisplayNotes from './src/components/displayNotes';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 function myDrawer() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator
+      drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="DM" component={DM} />
-      <Drawer.Screen name="Logout" component={Logout} />
     </Drawer.Navigator>
   );
 }
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Logout"
+        onPress={() => {
+          logout();
+          props.navigation.navigate('MainScreen');
+        }}
+      />
+    </DrawerContentScrollView>
+  );
+}
+const logout = async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (error) {
+    console.warn('error while logging out');
+  }
+};
 
 function myApp() {
   return (
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          {/* <Stack.Screen
-            options={{headerShown: false}}
-            name="SignUp"
-            component={SignUp}
-          /> */}
           <Stack.Screen
             options={{headerShown: false}}
             name="Splash"
@@ -53,11 +74,16 @@ function myApp() {
             name="MyDrawer"
             component={myDrawer}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             options={{headerShown: false}}
-            name="Home"
-            component={Home}
-          /> */}
+            name="AddNote"
+            component={AddNote}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="DisplayNotes"
+            component={DisplayNotes}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
