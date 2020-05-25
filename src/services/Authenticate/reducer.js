@@ -1,9 +1,11 @@
 import {AUTHENTICATE_DATA, CREATE_DATA} from './constants';
-const initialState = {};
+const initialState = {
+  id: '',
+};
 const authenticateReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case AUTHENTICATE_DATA:
-      return state;
+      return {...state, id: action.data};
     case CREATE_DATA:
       return state;
     default:

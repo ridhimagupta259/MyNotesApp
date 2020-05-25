@@ -6,7 +6,9 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  AsyncStorage,
 } from 'react-native';
+import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
 import DM from './dm';
 class Home extends React.Component {
@@ -14,6 +16,14 @@ class Home extends React.Component {
     super(props);
     this.state = {};
   }
+  storeData = async () => {
+    console.log('hey' + this.props.id);
+    try {
+      await AsyncStorage.setItem('id', this.props.id);
+    } catch (error) {
+      console.warn('error while logging out');
+    }
+  };
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -55,7 +65,9 @@ class Home extends React.Component {
       </SafeAreaView>
     );
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.storeData();
+  }
 }
 const styles = StyleSheet.create({
   container: {
@@ -110,4 +122,12 @@ const styles = StyleSheet.create({
     width: 60,
   },
 });
-export default Home;
+const mapStateToProps = state => ({
+  id: state.authenticateReducer.id,
+});
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Home);

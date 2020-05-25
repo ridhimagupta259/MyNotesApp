@@ -12,6 +12,8 @@ import Home from './src/components/home';
 import DarkMode from './src/components/darkMode';
 import DM from './src/components/dm';
 import Logout from './src/components/logout';
+import Splash from './src/components/splash';
+
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -36,6 +38,11 @@ function myApp() {
             name="SignUp"
             component={SignUp}
           /> */}
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Splash"
+            component={Splash}
+          />
           <Stack.Screen
             options={{headerShown: false}}
             name="MainScreen"

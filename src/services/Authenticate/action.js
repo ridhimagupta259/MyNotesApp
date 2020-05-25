@@ -23,9 +23,10 @@ export const authenticateApi = (username, password, callback) => dispatch => {
         callback && callback(false, responseJson, null);
       } else {
         callback && callback(true, responseJson, null);
-        console.log('true');
+        console.log(responseJson.id);
         dispatch({
           type: AUTHENTICATE_DATA,
+          data: responseJson.id,
         });
       }
     });
