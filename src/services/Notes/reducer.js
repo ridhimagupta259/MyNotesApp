@@ -1,4 +1,14 @@
-import {PERSONAL, WORK, IDEAS, LISTS} from './constants';
+import {
+  PERSONAL,
+  WORK,
+  IDEAS,
+  LISTS,
+  ADD_DATA,
+  PERSONAL_COUNTER,
+  WORK_COUNTER,
+  IDEAS_COUNTER,
+  LIST_COUNTER,
+} from './constants';
 
 const initialState = {
   personalCount: 0,
@@ -17,6 +27,29 @@ const notesReducer = (state = initialState, action = {}) => {
       return state;
     case LISTS:
       return state;
+    case ADD_DATA:
+      return state;
+    case PERSONAL_COUNTER:
+      return {
+        ...state,
+        personalCount: state.personalCount + 1,
+      };
+    case WORK_COUNTER:
+      return {
+        ...state,
+        workCount: state.workCount + 1,
+      };
+    case LIST_COUNTER:
+      return {
+        ...state,
+        listCount: state.listCount + 1,
+      };
+    case IDEAS_COUNTER:
+      return {
+        ...state,
+        ideasCount: state.ideasCount + 1,
+      };
+
     default:
       return state;
   }

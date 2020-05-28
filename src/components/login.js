@@ -19,7 +19,7 @@ class Login extends React.Component {
     super(props);
     this.state = {
       username: 'Ridhima',
-      password: 'test123',
+      password: 'test@1',
       hidePassword: true,
       usernameValidate: true,
     };
@@ -36,7 +36,6 @@ class Login extends React.Component {
     }
   }
   fbLogin() {
-    console.log('hey');
     LoginManager.logInWithPermissions(['public_profile']).then(
       function(result) {
         if (result.isCancelled) {

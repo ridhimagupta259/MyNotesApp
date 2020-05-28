@@ -1,8 +1,9 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+//import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
 import {colorConstants} from '../config/constant';
+import {toggleSplash} from '../services/Authenticate/action';
 
 class Splash extends React.Component {
   constructor(props) {
@@ -19,11 +20,13 @@ class Splash extends React.Component {
   getData = async () => {
     const {navigation} = this.props;
     try {
-      const value = await AsyncStorage.getItem('id');
+      const value = await AsyncStorage.getItem('header');
+      console.log('value' + value);
       if (value !== null) {
+        this.props.toggleSplash();
         navigation.reset({
           index: 0,
-          routes: [{name: 'MyDrawer'}],
+          routes: [{name: 'Home'}],
         });
       }
       if (value === null) {
@@ -53,7 +56,9 @@ const mapStateToProps = state => ({
   id: state.authenticateReducer.id,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  toggleSplash: toggleSplash,
+};
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

@@ -6,6 +6,7 @@ const apiConfig = {
   },
   createApi: {
     createUserApi: `${apiURL}/users/`,
+    createNotes: `${apiURL}/notes/`,
   },
 };
 

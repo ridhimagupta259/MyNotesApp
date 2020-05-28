@@ -10,6 +10,8 @@ export const imageConstants = {
   camera: require('../assets/camera.png'),
   menu: require('../assets/menu.png'),
   plus: require('../assets/plus.png'),
+  backarrow: require('../assets/backarrow.png'),
+
 };
 
 export const colorConstants = {

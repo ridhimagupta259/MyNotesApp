@@ -1,5 +1,6 @@
-import {AUTHENTICATE_DATA, CREATE_DATA} from './constants';
+import {AUTHENTICATE_DATA, CREATE_DATA, TOGGLE_SPLASH} from './constants';
 import config from '../../config/env';
+import AsyncStorage from 'react-native';
 
 export const authenticateApi = (username, password, callback) => dispatch => {
   let loginAPI = config.apiConfig.authenticationApi.loginUserApi;
@@ -24,6 +25,7 @@ export const authenticateApi = (username, password, callback) => dispatch => {
       } else {
         callback && callback(true, responseJson, null);
         console.log(responseJson.id);
+        //var temp = responseJson.id;
         dispatch({
           type: AUTHENTICATE_DATA,
           data: responseJson.id,
@@ -68,4 +70,26 @@ export const createApi = (
         });
       }
     });
+};
+
+export const toggleSplash = () => async dispatch => {
+  try {
+    const value = await AsyncStorage.getItem('token');
+    console.log(value);
+    if (value !== null) {
+      console.log('togglesplash');
+      dispatch({
+        type: TOGGLE_SPLASH,
+        data: value,
+      });
+    }
+    if (value === null) {
+      dispatch({
+        type: TOGGLE_SPLASH,
+        data: '',
+      });
+    }
+  } catch (error) {
+    console.log('error in getting token', error);
+  }
 };

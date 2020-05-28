@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert} from 'react-native';
+import {Alert, AsyncStorage} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
   createDrawerNavigator,
@@ -7,7 +7,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import AsyncStorage from '@react-native-community/async-storage';
+//import AsyncStorage from '@react-native-community/async-storage';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
@@ -15,9 +15,7 @@ import store from './src/services/rootreducer';
 import MainScreen from './src/components/mainScreen';
 import Home from './src/components/home';
 import DM from './src/components/dm';
-import Splash from './src/components/splash';
-import AddNote from './src/components/addNote';
-
+//import Splash from './src/components/splash';
 import DisplayNotes from './src/components/displayNotes';
 
 const Drawer = createDrawerNavigator();
@@ -59,11 +57,11 @@ function myApp() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen
+          {/* <Stack.Screen
             options={{headerShown: false}}
             name="Splash"
             component={Splash}
-          />
+          /> */}
           <Stack.Screen
             options={{headerShown: false}}
             name="MainScreen"
@@ -73,11 +71,6 @@ function myApp() {
             options={{headerShown: false}}
             name="MyDrawer"
             component={myDrawer}
-          />
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="AddNote"
-            component={AddNote}
           />
           <Stack.Screen
             options={{headerShown: false}}

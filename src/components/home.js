@@ -6,32 +6,48 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  FlatList,
+  TextInput,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+//import AsyncStorage from '@react-native-community/async-storage';
+import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
-import {selectedType} from '../services/Notes/action';
-import AddNote from './addNote';
+import {selectedType, addNote, update} from '../services/Notes/action';
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: '',
+      selectedCategory: '',
+      modalVisible: false,
+      title: '',
+      data: '',
+      category: '',
+      count: 3,
     };
   }
-  storeData = async () => {
-    console.log('hey' + this.props.id);
-    const jsonValue = JSON.stringify(this.props.id);
-    try {
-      await AsyncStorage.setItem('id', jsonValue);
-    } catch (error) {
-      console.warn('error');
-    }
-  };
+  // storeData = async () => {
+  //   console.log('hey' + this.props.id);
+  //   //const jsonValue = JSON.stringify(this.props.id);
+  //   //console.log('json' + jsonValue);
+  //   try {
+  //     await AsyncStorage.setItem('header', this.props.id);
+  //     console.log('AsyncStorage' + this.props.id);
+  //   } catch (error) {
+  //     console.warn('error');
+  //   }
+  // };
   onClick() {
-    this.props.navigation.navigate('DisplayNotes');
+    console.log(this.props.id);
+    this.props.navigation.navigate('DisplayNotes', {
+      param1: this.state.selectedCategory,
+      param2: this.state.count,
+    });
     this.props.selectedType(this.state.selectedCategory);
   }
+  toggleModal = () => {
+    this.setState({modalVisible: !this.state.modalVisible});
+  };
   render() {
     const {
       personalCount,
@@ -39,7 +55,9 @@ class Home extends React.Component {
       ideasCount,
       listCount,
       navigation,
+      id,
     } = this.props;
+    const {modalVisible} = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upperView}>
@@ -51,8 +69,9 @@ class Home extends React.Component {
         <View style={styles.middleView}>
           <TouchableOpacity
             onPress={() => {
-              this.setState({selectedCategory: 'Personal'}, () =>
-                this.onClick(),
+              this.setState(
+                {selectedCategory: 'Personal', count: personalCount},
+                () => this.onClick(),
               );
             }}>
             <View style={styles.categoryView}>
@@ -62,7 +81,9 @@ class Home extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              this.setState({selectedCategory: 'Work'}, () => this.onClick());
+              this.setState({selectedCategory: 'Work', count: workCount}, () =>
+                this.onClick(),
+              );
             }}>
             <View style={styles.categoryView}>
               <Text style={styles.categoryText}>Work</Text>
@@ -71,7 +92,10 @@ class Home extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              this.setState({selectedCategory: 'Ideas'}, () => this.onClick());
+              this.setState(
+                {selectedCategory: 'Ideas', count: ideasCount},
+                () => this.onClick(),
+              );
             }}>
             <View style={styles.categoryView}>
               <Text style={styles.categoryText}>Ideas</Text>
@@ -80,7 +104,9 @@ class Home extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              this.setState({selectedCategory: 'List'}, () => this.onClick());
+              this.setState({selectedCategory: 'List', count: listCount}, () =>
+                this.onClick(),
+              );
             }}>
             <View style={styles.categoryView}>
               <Text style={styles.categoryText}>List</Text>
@@ -94,17 +120,61 @@ class Home extends React.Component {
               onPress={() => this.props.navigation.toggleDrawer()}>
               <Image source={imageConstants.menu} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('AddNote')}>
+            <TouchableOpacity
+              onPress={() => {
+                this.toggleModal(!modalVisible);
+              }}>
               <Image source={imageConstants.plus} style={styles.plusImage} />
             </TouchableOpacity>
           </View>
         </View>
+        <Modal
+          visible={this.state.modalVisible}
+          animationType="slide"
+          hasBackdrop={true}
+          onBackdropPress={this.toggleModal}>
+          <View style={styles.ModalMainVIew}>
+            <View style={styles.input}>
+              <TextInput
+                style={styles.textbox}
+                placeholder={'Category'}
+                placeholderTextColor={colorConstants.white}
+                onChangeText={text => this.setState({category: text})}
+              />
+            </View>
+            <View style={styles.input}>
+              <TextInput
+                style={styles.textbox}
+                placeholder={'Title'}
+                placeholderTextColor={colorConstants.white}
+                onChangeText={text => this.setState({title: text})}
+              />
+            </View>
+            <View style={styles.input}>
+              <TextInput
+                style={styles.textbox}
+                placeholder={'Data'}
+                placeholderTextColor={colorConstants.white}
+                onChangeText={text => this.setState({data: text})}
+              />
+            </View>
+            <View style={styles.submitButton}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.addNote(this.state.title, this.state.data, id);
+                  this.props.update(this.state.category);
+                }}>
+                <Text style={styles.submitText}>SUBMIT</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     );
   }
-  componentDidMount() {
-    this.storeData();
-  }
+  // componentDidMount() {
+  //   this.storeData();
+  // }
 }
 const styles = StyleSheet.create({
   container: {
@@ -158,6 +228,34 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
   },
+  ModalMainVIew: {
+    flex: 0.4,
+    backgroundColor: colorConstants.navyblue,
+    width: '100%',
+  },
+  textbox: {
+    fontSize: 20,
+    paddingBottom: 10,
+    borderBottomColor: colorConstants.white,
+    marginTop: 20,
+    color: colorConstants.white,
+    height: 40,
+  },
+  innerView: {
+    marginHorizontal: 20,
+  },
+  input: {
+    borderBottomColor: colorConstants.white,
+    borderBottomWidth: 1,
+    marginHorizontal: 30,
+    marginTop: 20,
+  },
+  submitButton: {marginHorizontal: 30, marginTop: 20},
+  submitText: {
+    color: colorConstants.white,
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
 });
 const mapStateToProps = state => ({
   id: state.authenticateReducer.id,
@@ -168,6 +266,8 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = {
   selectedType: selectedType,
+  addNote: addNote,
+  update: update,
 };
 
 export default connect(
