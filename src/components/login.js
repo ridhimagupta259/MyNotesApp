@@ -100,7 +100,9 @@ class Login extends React.Component {
                   password,
                   (status, response, error) => {
                     if (status) {
-                      navigation.navigate('MyDrawer');
+                      setTimeout(() => {
+                        navigation.navigate('MyDrawer');
+                      }, 1000);
                     } else {
                       Alert.alert('Error', 'Wrong Login Credentials');
                     }

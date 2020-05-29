@@ -8,24 +8,25 @@ import {
   Image,
   FlatList,
 } from 'react-native';
+import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
+import {displayuserNotes} from '../services/Notes/action';
 
 class DisplayNotes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       toggle: true,
-      newdata: [
-        {value: 'Personal'},
-        {value: 'Ideas'},
-        {value: 'Work'},
-        {value: 'Lists'},
-      ],
     };
   }
   render() {
     const {param1, param2} = this.props.route.params;
-    const {navigation} = this.props;
+    const {userData} = this.props;
+    var newdata = userData.filter(item => {
+      if (item.title === param1) {
+        return item;
+      }
+    });
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity
@@ -45,15 +46,12 @@ class DisplayNotes extends React.Component {
         </View>
         <View style={styles.flatlistview}>
           <FlatList
-            data={this.state.newdata}
+            data={newdata}
             renderItem={({item}) => {
               return (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Search');
-                  }}>
+                <TouchableOpacity>
                   <View style={styles.textEdit}>
-                    <Text style={styles.uppertext}>{item.value}</Text>
+                    <Text style={styles.uppertext}>{item.data}</Text>
                   </View>
                 </TouchableOpacity>
               );
@@ -64,7 +62,9 @@ class DisplayNotes extends React.Component {
       </SafeAreaView>
     );
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.displayuserNotes(this.props.id);
+  }
 }
 const styles = StyleSheet.create({
   container: {
@@ -117,4 +117,15 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
 });
-export default DisplayNotes;
+const mapStateToProps = state => ({
+  userData: state.notesReducer.userData,
+  id: state.authenticateReducer.id,
+});
+const mapDispatchToProps = {
+  displayuserNotes: displayuserNotes,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DisplayNotes);

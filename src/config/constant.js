@@ -11,7 +11,6 @@ export const imageConstants = {
   menu: require('../assets/menu.png'),
   plus: require('../assets/plus.png'),
   backarrow: require('../assets/backarrow.png'),
-
 };
 
 export const colorConstants = {

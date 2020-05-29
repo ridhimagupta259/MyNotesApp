@@ -1,13 +1,11 @@
 import {
-  PERSONAL,
-  WORK,
-  IDEAS,
-  LISTS,
   ADD_DATA,
   PERSONAL_COUNTER,
   WORK_COUNTER,
   IDEAS_COUNTER,
   LIST_COUNTER,
+  DISPLAY_DATA,
+  COUNTER,
 } from './constants';
 
 const initialState = {
@@ -15,18 +13,11 @@ const initialState = {
   workCount: 0,
   ideasCount: 0,
   listCount: 0,
+  userData: [],
 };
 
 const notesReducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case PERSONAL:
-      return state;
-    case IDEAS:
-      return state;
-    case WORK:
-      return state;
-    case LISTS:
-      return state;
     case ADD_DATA:
       return state;
     case PERSONAL_COUNTER:
@@ -49,7 +40,19 @@ const notesReducer = (state = initialState, action = {}) => {
         ...state,
         ideasCount: state.ideasCount + 1,
       };
-
+    case DISPLAY_DATA:
+      return {
+        ...state,
+        userData: action.data,
+      };
+    case COUNTER:
+      return {
+        ...state,
+        personalCount: action.data.pc,
+        workCount: action.data.wc,
+        ideasCount: action.data.ic,
+        listCount: action.data.lc,
+      };
     default:
       return state;
   }

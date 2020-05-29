@@ -13,7 +13,13 @@ import {
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
-import {selectedType, addNote, update} from '../services/Notes/action';
+import {
+  selectedType,
+  addNote,
+  update,
+  displayuserNotes,
+  countCategory,
+} from '../services/Notes/action';
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +29,7 @@ class Home extends React.Component {
       title: '',
       data: '',
       category: '',
-      count: 3,
+      count: 0,
     };
   }
   // storeData = async () => {
@@ -38,12 +44,13 @@ class Home extends React.Component {
   //   }
   // };
   onClick() {
+    console.log(this.props.userData);
     console.log(this.props.id);
+    //this.props.displayuserNotes(this.props.id);
     this.props.navigation.navigate('DisplayNotes', {
       param1: this.state.selectedCategory,
       param2: this.state.count,
     });
-    this.props.selectedType(this.state.selectedCategory);
   }
   toggleModal = () => {
     this.setState({modalVisible: !this.state.modalVisible});
@@ -142,14 +149,20 @@ class Home extends React.Component {
                 onChangeText={text => this.setState({category: text})}
               />
             </View>
-            <View style={styles.input}>
+            {/* <View style={{flexDirection:'row'}}>
+              <Text>Personal</Text>
+              <Text>Work</Text>
+              <Text>Ideas</Text>
+              <Text>List</Text>
+            </View> */}
+            {/* <View style={styles.input}>
               <TextInput
                 style={styles.textbox}
                 placeholder={'Title'}
                 placeholderTextColor={colorConstants.white}
                 onChangeText={text => this.setState({title: text})}
               />
-            </View>
+            </View> */}
             <View style={styles.input}>
               <TextInput
                 style={styles.textbox}
@@ -161,7 +174,7 @@ class Home extends React.Component {
             <View style={styles.submitButton}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.addNote(this.state.title, this.state.data, id);
+                  this.props.addNote(this.state.category, this.state.data, id);
                   this.props.update(this.state.category);
                 }}>
                 <Text style={styles.submitText}>SUBMIT</Text>
@@ -172,9 +185,12 @@ class Home extends React.Component {
       </SafeAreaView>
     );
   }
-  // componentDidMount() {
-  //   this.storeData();
-  // }
+  componentDidMount() {
+    this.props.displayuserNotes(this.props.id);
+    setTimeout(() => {
+      this.props.countCategory(this.props.userData);
+    }, 1000);
+  }
 }
 const styles = StyleSheet.create({
   container: {
@@ -263,11 +279,14 @@ const mapStateToProps = state => ({
   workCount: state.notesReducer.workCount,
   ideasCount: state.notesReducer.ideasCount,
   listCount: state.notesReducer.listCount,
+  userData: state.notesReducer.userData,
 });
 const mapDispatchToProps = {
   selectedType: selectedType,
   addNote: addNote,
   update: update,
+  displayuserNotes: displayuserNotes,
+  countCategory: countCategory,
 };
 
 export default connect(
