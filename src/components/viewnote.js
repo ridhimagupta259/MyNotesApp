@@ -31,15 +31,15 @@ const styles = StyleSheet.create({
   },
   upperView: {
     flex: 2,
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   lowerView: {
     flex: 8,
   },
-  textStyle:{
-      fontSize:30,
-      fontWeight:'bold',
-      color:colorConstants.navyblue,
-  }
+  textStyle: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: colorConstants.navyblue,
+  },
 });
 export default ViewNote;

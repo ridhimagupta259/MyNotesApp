@@ -9,7 +9,7 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
-//import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
@@ -33,11 +33,8 @@ class Home extends React.Component {
   }
   // storeData = async () => {
   //   console.log('hey' + this.props.id);
-  //   //const jsonValue = JSON.stringify(this.props.id);
-  //   //console.log('json' + jsonValue);
   //   try {
   //     await AsyncStorage.setItem('header', this.props.id);
-  //     console.log('AsyncStorage' + this.props.id);
   //   } catch (error) {
   //     console.warn('error');
   //   }
@@ -131,24 +128,56 @@ class Home extends React.Component {
           hasBackdrop={true}
           onBackdropPress={this.toggleModal}>
           <View style={styles.ModalMainVIew}>
-            <View style={styles.input}>
-              <TextInput
-                style={styles.textbox}
-                placeholder={'Category'}
-                placeholderTextColor={colorConstants.white}
-                onChangeText={text => this.setState({category: text})}
-              />
+            <View style={styles.modalinnerView}>
+              <View style={styles.titleButtonView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      category: 'Personal',
+                    });
+                  }}>
+                  <Text style={styles.catText}>Personal</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.titleButtonView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      category: 'Work',
+                    });
+                  }}>
+                  <Text style={styles.catText}>Work</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.titleButtonView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      category: 'Ideas',
+                    });
+                  }}>
+                  <Text style={styles.catText}>Ideas</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.titleButtonView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      category: 'List',
+                    });
+                  }}>
+                  <Text style={styles.catText}>List</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            {/* <View style={{flexDirection:'row'}}>
-              <Text>Personal</Text>
-              <Text>Work</Text>
-              <Text>Ideas</Text>
-              <Text>List</Text>
-            </View> */}
+            <View style={styles.modalinnerView}>
+              <Text style={styles.lineText}>Selected category is:</Text>
+              <Text style={styles.lineText}>{this.state.category}</Text>
+            </View>
             <View style={styles.input}>
               <TextInput
                 style={styles.textbox}
-                placeholder={'Data'}
+                placeholder={'Enter Note'}
                 placeholderTextColor={colorConstants.white}
                 onChangeText={text => this.setState({data: text})}
               />
@@ -156,8 +185,16 @@ class Home extends React.Component {
             <View style={styles.submitButton}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.addNote(this.state.category, this.state.data, id);
-                  this.props.update(this.state.category);
+                  if (this.state.category && this.state.data) {
+                    this.props.addNote(
+                      this.state.category,
+                      this.state.data,
+                      id,
+                    );
+
+                    this.props.update(this.state.category);
+                  }
+                  this.toggleModal(!modalVisible);
                 }}>
                 <Text style={styles.submitText}>SUBMIT</Text>
               </TouchableOpacity>
@@ -253,6 +290,25 @@ const styles = StyleSheet.create({
   submitText: {
     color: colorConstants.white,
     fontWeight: 'bold',
+    fontSize: 20,
+  },
+  catText: {
+    color: colorConstants.navyblue,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  modalinnerView: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: 20,
+  },
+  titleButtonView: {
+    backgroundColor: colorConstants.white,
+    padding: 15,
+    borderRadius: 10,
+  },
+  lineText: {
+    color: colorConstants.white,
     fontSize: 20,
   },
 });

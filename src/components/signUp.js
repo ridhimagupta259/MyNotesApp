@@ -269,7 +269,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  //flag: state.homeReducer.homeFlag,
 });
 
 const mapDispatchToProps = {

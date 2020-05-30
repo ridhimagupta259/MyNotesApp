@@ -63,11 +63,13 @@ export const createApi = (
       if (responseJson.status === false) {
         callback && callback(false, responseJson, null);
       } else {
-        callback && callback(true, responseJson, null);
         console.log('true');
+        console.log(responseJson.body.id);
         dispatch({
           type: CREATE_DATA,
+          data: responseJson.body.id,
         });
+        callback && callback(true, responseJson, null);
       }
     });
 };

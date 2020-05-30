@@ -29,7 +29,6 @@ class DisplayNotes extends React.Component {
       duration: 2000,
       useNativeDriver: true,
     }).start();
-    // this.opacity.setValue(1);
   };
   render() {
     const {param1} = this.props.route.params;
@@ -81,6 +80,25 @@ class DisplayNotes extends React.Component {
             renderItem={({item}) => {
               return (
                 <View style={styles.textEdit}>
+                  <View>
+                    <Text style={{color: colorConstants.red}}>
+                      {item.createdDate.slice(0, 10)}
+                      <Text style={{color: colorConstants.red}}> at </Text>
+                      {item.createdDate.slice(11, 16)}
+                    </Text>
+                    <View style={{alignItems: 'flex-end'}}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.props.deleteNotes(
+                            this.props.id,
+                            item.id,
+                            item.title,
+                          );
+                        }}>
+                        <Image source={imageConstants.bluecross} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                   <TouchableOpacity
                     onPress={() =>
                       this.props.navigation.navigate('ViewNote', {
@@ -106,16 +124,6 @@ class DisplayNotes extends React.Component {
                       numberOfLines={2}>
                       {item.data}
                     </Animated.Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.deleteNotes(
-                        this.props.id,
-                        item.id,
-                        item.title,
-                      );
-                    }}>
-                    <Image source={imageConstants.bluecross} />
                   </TouchableOpacity>
                 </View>
               );
@@ -165,18 +173,14 @@ const styles = StyleSheet.create({
   },
   flatlistview: {marginHorizontal: 20, flex: 2},
   textEdit: {
-    height: 100,
+    height: 130,
     backgroundColor: colorConstants.white,
     padding: 20,
-    justifyContent: 'space-between',
-    alignContent:'flex-end',
-    flexDirection: 'row',
     marginVertical: 8,
     shadowColor: colorConstants.black,
     shadowOffset: {width: 0, height: 8},
     shadowOpacity: 0.08,
     shadowRadius: 6.32,
-
     elevation: 1,
   },
 });

@@ -21,6 +21,7 @@ class Splash extends React.Component {
     const {navigation} = this.props;
     try {
       const value = await AsyncStorage.getItem('header');
+      this.props.toggleSplash();
       console.log('value' + value);
       if (value !== null) {
         this.props.toggleSplash();

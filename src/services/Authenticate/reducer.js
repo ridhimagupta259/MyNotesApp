@@ -9,7 +9,7 @@ const authenticateReducer = (state = initialState, action) => {
     case AUTHENTICATE_DATA:
       return {...state, id: action.data};
     case CREATE_DATA:
-      return state;
+      return {...state, id: action.data};
     case TOGGLE_SPLASH:
       return {
         ...state,

@@ -25,6 +25,7 @@ const Stack = createStackNavigator();
 function myDrawer() {
   return (
     <Drawer.Navigator
+      initialRouteName="Home"
       drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="DM" component={DM} />
