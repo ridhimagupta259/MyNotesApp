@@ -95,17 +95,21 @@ class Login extends React.Component {
           <View style={styles.logInView}>
             <TouchableOpacity
               onPress={() => {
-                this.props.authenticateApi(
-                  username,
-                  password,
-                  (status, response, error) => {
-                    if (status) {
-                      navigation.navigate('MyDrawer');
-                    } else {
-                      Alert.alert('Error', 'Wrong Login Credentials');
-                    }
-                  },
-                );
+                if (this.state.username && this.state.password) {
+                  this.props.authenticateApi(
+                    username,
+                    password,
+                    (status, response, error) => {
+                      if (status) {
+                        navigation.navigate('MyDrawer');
+                      } else {
+                        Alert.alert('Error', 'Wrong Login Credentials');
+                      }
+                    },
+                  );
+                } else {
+                  Alert.alert('Error', 'Wrong Login Credentials');
+                }
               }}>
               <View style={styles.logInText}>
                 <Image source={imageConstants.tick} style={styles.tickImage} />
