@@ -21,10 +21,10 @@ class Splash extends React.Component {
     const {navigation} = this.props;
     try {
       const value = await AsyncStorage.getItem('header');
-      this.props.toggleSplash();
+      //this.props.toggleSplash();
       console.log('value' + value);
       if (value !== null) {
-        this.props.toggleSplash();
+        //this.props.toggleSplash();
         navigation.reset({
           index: 0,
           routes: [{name: 'MyDrawer'}],

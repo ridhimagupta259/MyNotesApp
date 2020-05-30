@@ -21,4 +21,5 @@ export const colorConstants = {
   blue: '#7381c4',
   navyblue: '#373969',
   red: '#eb2827',
+  lightred: '#fcd5d3',
 };

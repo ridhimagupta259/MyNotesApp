@@ -71,7 +71,9 @@ class DisplayNotes extends React.Component {
         <View style={styles.upperView}>
           <View style={styles.titleText}>
             <Text style={styles.titleStyle}>{param1} </Text>
-            <Text style={styles.countStyle}> {count}</Text>
+            <View style={styles.numberView}>
+              <Text style={styles.countStyle}> {count}</Text>
+            </View>
           </View>
         </View>
         <View style={styles.flatlistview}>
@@ -162,6 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 50,
     fontWeight: 'bold',
     color: colorConstants.red,
+    marginRight: 5,
   },
   back: {
     flexDirection: 'row',
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '500',
   },
-  flatlistview: {marginHorizontal: 20, flex: 2},
+  flatlistview: {marginHorizontal: 20, flex: 1},
   textEdit: {
     height: 130,
     backgroundColor: colorConstants.white,
@@ -182,6 +185,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 6.32,
     elevation: 1,
+  },
+  numberView: {
+    backgroundColor: colorConstants.lightred,
+    width: 70,
+    height: 70,
+    alignItems: 'center',
+    borderRadius: 35,
+    padding: 3,
   },
 });
 const mapStateToProps = state => ({

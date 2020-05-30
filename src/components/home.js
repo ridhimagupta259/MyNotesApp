@@ -9,7 +9,7 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+//import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
@@ -51,7 +51,7 @@ class Home extends React.Component {
   };
   render() {
     const {personalCount, workCount, ideasCount, listCount, id} = this.props;
-    const {modalVisible} = this.state;
+    const {modalVisible, select} = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upperView}>
@@ -64,7 +64,10 @@ class Home extends React.Component {
           <TouchableOpacity
             onPress={() => {
               this.setState(
-                {selectedCategory: 'Personal', count: personalCount},
+                {
+                  selectedCategory: 'Personal',
+                  count: personalCount,
+                },
                 () => this.onClick(),
               );
             }}>
@@ -75,8 +78,12 @@ class Home extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              this.setState({selectedCategory: 'Work', count: workCount}, () =>
-                this.onClick(),
+              this.setState(
+                {
+                  selectedCategory: 'Work',
+                  count: workCount,
+                },
+                () => this.onClick(),
               );
             }}>
             <View style={styles.categoryView}>

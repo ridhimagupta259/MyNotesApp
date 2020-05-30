@@ -83,6 +83,7 @@ class SignUp extends React.Component {
               style={styles.textbox}
               placeholder={'Email address'}
               placeholderTextColor={colorConstants.grey}
+              autoCapitalize="none"
               onChangeText={text => {
                 this.validate(text, 'email');
               }}
@@ -268,8 +269,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = {
   createApi: createApi,
