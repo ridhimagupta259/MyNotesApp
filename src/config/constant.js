@@ -11,6 +11,7 @@ export const imageConstants = {
   menu: require('../assets/menu.png'),
   plus: require('../assets/plus.png'),
   backarrow: require('../assets/backarrow.png'),
+  bluecross: require('../assets/bluecross.png'),
 };
 
 export const colorConstants = {
@@ -18,6 +19,6 @@ export const colorConstants = {
   grey: '#737373',
   black: '#000',
   blue: '#7381c4',
-  navyblue:'#373969',
+  navyblue: '#373969',
   red: '#eb2827',
 };

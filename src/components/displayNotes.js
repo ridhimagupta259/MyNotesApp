@@ -7,26 +7,57 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Animated,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
-import {displayuserNotes} from '../services/Notes/action';
+import {deleteNotes, deleteUpdate} from '../services/Notes/action';
 
 class DisplayNotes extends React.Component {
   constructor(props) {
     super(props);
+    this.opacity = 0;
+    this.animatedValue = new Animated.Value(this.opacity);
     this.state = {
       toggle: true,
     };
   }
+  animate = () => {
+    this.opacity = this.opacity === 0 ? 1 : 0;
+    Animated.timing(this.animatedValue, {
+      toValue: this.opacity,
+      duration: 2000,
+      useNativeDriver: true,
+    }).start();
+    // this.opacity.setValue(1);
+  };
   render() {
-    const {param1, param2} = this.props.route.params;
-    const {userData} = this.props;
+    const {param1} = this.props.route.params;
+    const {
+      userData,
+      personalCount,
+      workCount,
+      ideasCount,
+      listCount,
+    } = this.props;
+    var count;
     var newdata = userData.filter(item => {
       if (item.title === param1) {
         return item;
       }
     });
+    if (param1 === 'Personal') {
+      var count = personalCount;
+    }
+    if (param1 === 'Work') {
+      var count = workCount;
+    }
+    if (param1 === 'Ideas') {
+      var count = ideasCount;
+    }
+    if (param1 === 'List') {
+      var count = listCount;
+    }
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity
@@ -41,7 +72,7 @@ class DisplayNotes extends React.Component {
         <View style={styles.upperView}>
           <View style={styles.titleText}>
             <Text style={styles.titleStyle}>{param1} </Text>
-            <Text style={styles.countStyle}> {param2}</Text>
+            <Text style={styles.countStyle}> {count}</Text>
           </View>
         </View>
         <View style={styles.flatlistview}>
@@ -49,11 +80,44 @@ class DisplayNotes extends React.Component {
             data={newdata}
             renderItem={({item}) => {
               return (
-                <TouchableOpacity>
-                  <View style={styles.textEdit}>
-                    <Text style={styles.uppertext}>{item.data}</Text>
-                  </View>
-                </TouchableOpacity>
+                <View style={styles.textEdit}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('ViewNote', {
+                        data: item.data,
+                      })
+                    }>
+                    <Animated.Text
+                      style={{
+                        fontSize: 15,
+                        color: colorConstants.navyblue,
+                        fontWeight: 'bold',
+                        opacity: this.animatedValue,
+                        transform: [
+                          {
+                            translateY: this.animatedValue.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0, 20],
+                            }),
+                          },
+                        ],
+                      }}
+                      ellipsizeMode="tail"
+                      numberOfLines={2}>
+                      {item.data}
+                    </Animated.Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.deleteNotes(
+                        this.props.id,
+                        item.id,
+                        item.title,
+                      );
+                    }}>
+                    <Image source={imageConstants.bluecross} />
+                  </TouchableOpacity>
+                </View>
               );
             }}
             keyExtractor={item => item.id}
@@ -63,7 +127,7 @@ class DisplayNotes extends React.Component {
     );
   }
   componentDidMount() {
-    this.props.displayuserNotes(this.props.id);
+    this.animate();
   }
 }
 const styles = StyleSheet.create({
@@ -99,16 +163,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '500',
   },
-  flatlistview: {marginHorizontal: 20},
-  uppertext: {fontWeight: 'bold', fontSize: 17},
+  flatlistview: {marginHorizontal: 20, flex: 2},
   textEdit: {
-    //width: '100%',
     height: 100,
     backgroundColor: colorConstants.white,
     padding: 20,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    alignContent:'flex-end',
+    flexDirection: 'row',
     marginVertical: 8,
-    marginHorizontal: 5,
     shadowColor: colorConstants.black,
     shadowOffset: {width: 0, height: 8},
     shadowOpacity: 0.08,
@@ -120,9 +183,14 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   userData: state.notesReducer.userData,
   id: state.authenticateReducer.id,
+  ideasCount: state.notesReducer.ideasCount,
+  personalCount: state.notesReducer.personalCount,
+  workCount: state.notesReducer.workCount,
+  listCount: state.notesReducer.listCount,
 });
 const mapDispatchToProps = {
-  displayuserNotes: displayuserNotes,
+  deleteNotes: deleteNotes,
+  deleteUpdate: deleteUpdate,
 };
 
 export default connect(

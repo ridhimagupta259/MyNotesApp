@@ -147,9 +147,7 @@ class SignUp extends React.Component {
                   phonenumber,
                   (status, response, error) => {
                     if (status) {
-                      setTimeout(() => {
-                        navigation.navigate('MyDrawer');
-                      }, 1000);
+                      navigation.navigate('MyDrawer');
                     } else {
                       Alert.alert('Error', 'Wrong Login Credentials');
                     }

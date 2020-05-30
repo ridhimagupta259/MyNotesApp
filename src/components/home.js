@@ -14,7 +14,6 @@ import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
 import {
-  selectedType,
   addNote,
   update,
   displayuserNotes,
@@ -46,24 +45,15 @@ class Home extends React.Component {
   onClick() {
     console.log(this.props.userData);
     console.log(this.props.id);
-    //this.props.displayuserNotes(this.props.id);
     this.props.navigation.navigate('DisplayNotes', {
       param1: this.state.selectedCategory,
-      param2: this.state.count,
     });
   }
   toggleModal = () => {
     this.setState({modalVisible: !this.state.modalVisible});
   };
   render() {
-    const {
-      personalCount,
-      workCount,
-      ideasCount,
-      listCount,
-      navigation,
-      id,
-    } = this.props;
+    const {personalCount, workCount, ideasCount, listCount, id} = this.props;
     const {modalVisible} = this.state;
     return (
       <SafeAreaView style={styles.container}>
@@ -155,14 +145,6 @@ class Home extends React.Component {
               <Text>Ideas</Text>
               <Text>List</Text>
             </View> */}
-            {/* <View style={styles.input}>
-              <TextInput
-                style={styles.textbox}
-                placeholder={'Title'}
-                placeholderTextColor={colorConstants.white}
-                onChangeText={text => this.setState({title: text})}
-              />
-            </View> */}
             <View style={styles.input}>
               <TextInput
                 style={styles.textbox}
@@ -186,6 +168,7 @@ class Home extends React.Component {
     );
   }
   componentDidMount() {
+    //this.storeData();
     this.props.displayuserNotes(this.props.id);
     setTimeout(() => {
       this.props.countCategory(this.props.userData);
@@ -282,7 +265,6 @@ const mapStateToProps = state => ({
   userData: state.notesReducer.userData,
 });
 const mapDispatchToProps = {
-  selectedType: selectedType,
   addNote: addNote,
   update: update,
   displayuserNotes: displayuserNotes,

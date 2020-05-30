@@ -6,6 +6,11 @@ import {
   IDEAS_COUNTER,
   DISPLAY_DATA,
   COUNTER,
+  DELETE_DATA,
+  DELETE_IDEAS,
+  DELETE_LIST,
+  DELETE_PERSONAL,
+  DELETE_WORK,
 } from './constants';
 import config from '../../config/env';
 
@@ -38,6 +43,7 @@ export const addNote = (title, data, id) => dispatch => {
         dispatch({
           type: ADD_DATA,
         });
+        dispatch(displayuserNotes(id));
       }
     });
 };
@@ -74,8 +80,6 @@ export const displayuserNotes = id => dispatch => {
     })
     .then(responseJson => {
       console.log(responseJson.response);
-      var array = responseJson.response;
-      console.log(array);
       if (responseJson.status === false) {
         console.log('Cannot display data');
       } else {
@@ -113,5 +117,50 @@ export function countCategory(data) {
       }
     });
     dispatch({type: COUNTER, data: count});
+  };
+}
+
+export const deleteNotes = (id, notesid, title) => dispatch => {
+  let deletenotesApi = config.apiConfig.deleteApi.deleteNotes;
+  console.log(deletenotesApi + id + '/' + notesid);
+  fetch(deletenotesApi + id + '/' + notesid, {
+    method: 'DELETE',
+  })
+    .then(response => {
+      return response.json();
+    })
+    .then(responseJson => {
+      console.log(responseJson);
+      if (responseJson.status === false) {
+        console.log('Cannot delete data');
+      } else {
+        console.log('deleted');
+        dispatch({
+          type: DELETE_DATA,
+        });
+        dispatch(displayuserNotes(id));
+        dispatch(deleteUpdate(title));
+      }
+    });
+};
+
+export function deleteUpdate(title) {
+  return dispatch => {
+    switch (title) {
+      case 'Personal':
+        dispatch({type: DELETE_PERSONAL});
+        break;
+
+      case 'Ideas': {
+        dispatch({type: DELETE_IDEAS});
+        break;
+      }
+      case 'Work':
+        dispatch({type: DELETE_WORK});
+        break;
+      case 'List':
+        dispatch({type: DELETE_LIST});
+        break;
+    }
   };
 }

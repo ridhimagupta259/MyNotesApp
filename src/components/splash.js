@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-//import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
 import {colorConstants} from '../config/constant';
 import {toggleSplash} from '../services/Authenticate/action';
@@ -26,7 +26,7 @@ class Splash extends React.Component {
         this.props.toggleSplash();
         navigation.reset({
           index: 0,
-          routes: [{name: 'Home'}],
+          routes: [{name: 'MyDrawer'}],
         });
       }
       if (value === null) {

@@ -8,6 +8,9 @@ const apiConfig = {
     createUserApi: `${apiURL}/users/`,
     createNotes: `${apiURL}/notes/`,
   },
+  deleteApi: {
+    deleteNotes: `${apiURL}/notes/`,
+  },
 };
 
 export default {
