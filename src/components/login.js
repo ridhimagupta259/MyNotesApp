@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {connect} from 'react-redux';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import {
   authenticateApi,
@@ -60,6 +61,27 @@ class Login extends React.Component {
       },
     );
   }
+  signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      this.props.socialSignIn(
+        userInfo.user.givenname,
+        userInfo.user.email,
+        userInfo.user.id,
+      );
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
 
   render() {
     const {navigation} = this.props.props;
@@ -74,7 +96,7 @@ class Login extends React.Component {
           <View style={usernameValidate ? styles.input : styles.notValidated}>
             <TextInput
               style={styles.textbox}
-              placeholder={'Username or email address'}
+              placeholder={'Username'}
               placeholderTextColor={colorConstants.grey}
               autoCapitalize="none"
               onChangeText={text => {
@@ -125,7 +147,7 @@ class Login extends React.Component {
                 <Text style={styles.logtxt}>LOG IN</Text>
               </View>
               {this.props.loading ? (
-                <ActivityIndicator size="large" color={colorConstants.blue} />
+                <ActivityIndicator size="small" color={colorConstants.blue} />
               ) : null}
             </TouchableOpacity>
           </View>
@@ -134,7 +156,7 @@ class Login extends React.Component {
           <View style={styles.lowerText}>
             <Text style={styles.lowerTextStyle}>Login with</Text>
             <View style={styles.iconsView}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => this.signIn()}>
                 <Image
                   style={styles.iconStyle}
                   source={imageConstants.gplusicon}
@@ -164,7 +186,12 @@ class Login extends React.Component {
       </SafeAreaView>
     );
   }
-  componentDidMount() {}
+  componentDidMount() {
+    GoogleSignin.configure({
+      webClientId:
+        '835121537715-5n6a858ilsf3bfvdeaib4otrc68ls9rp.apps.googleusercontent.com',
+    });
+  }
 }
 
 const styles = StyleSheet.create({

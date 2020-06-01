@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   },
   titleButtonView: {
     backgroundColor: colorConstants.white,
-    padding: 15,
+    padding: 10,
     borderRadius: 10,
   },
   lineText: {

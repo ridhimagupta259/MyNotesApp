@@ -8,6 +8,7 @@ import {
 const initialState = {
   id: '',
   loading: false,
+  socialData: [],
 };
 const authenticateReducer = (state = initialState, action) => {
   console.log('action called', action);
@@ -25,6 +26,9 @@ const authenticateReducer = (state = initialState, action) => {
         ...state,
         id: action.data,
       };
+    case LOGIN_SUCCESS: {
+      return {...state, socialData: action.data};
+    }
     // case LOGIN_SUCCESS:
     //   return {
     //     ...state,

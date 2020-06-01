@@ -92,32 +92,28 @@ export const toggleSplash = value => dispatch => {
   });
 };
 
-// export const initUser = userinfo => dispatch => {
-//   console.warn(userinfo);
-//   let signUpUrl = config.apiConfig.createApi.createUser;
-//   dispatch({
-//     type: LOGIN_START,
-//   });
-//   fetch(signUpUrl, {
-//     method: 'POST',
-//     headers: {
-//       Accept: 'application/json',
-//       'content-type': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       username: userinfo.name,
-//       password: '',
-//       email: userinfo.email,
-//       socialId: userinfo.id,
-//     }),
-//   })
-//     .then(response => response.json())
-//     .then(responseJson => {
-//       if (responseJson.status === true) {
-//         dispatch({
-//           type: LOGIN_SUCCESS,
-//           data: [responseJson.body, userinfo],
-//         });
-//       }
-//     });
-// };
+export const socialSignIn = (name, email, id) => dispatch => {
+  let signUpUrl = config.apiConfig.createApi.createUserApi;
+  fetch(signUpUrl, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: name,
+      password: '',
+      email: email,
+      socialId: id,
+    }),
+  })
+    .then(response => {
+      return response.json();
+    })
+    .then(responseJson => {
+      dispatch({
+        type: LOGIN_SUCCESS,
+        data: responseJson,
+      });
+    });
+};

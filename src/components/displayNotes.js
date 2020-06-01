@@ -82,31 +82,36 @@ class DisplayNotes extends React.Component {
                       </TouchableOpacity>
                     </View>
                   </View>
+
+                  <Animated.Text
+                    style={{
+                      fontSize: 15,
+                      color: colorConstants.navyblue,
+                      fontWeight: 'bold',
+                      opacity: this.animatedValue,
+                      transform: [
+                        {
+                          translateY: this.animatedValue.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [0, 20],
+                          }),
+                        },
+                      ],
+                    }}
+                    ellipsizeMode="tail"
+                    numberOfLines={2}>
+                    {item.data}
+                  </Animated.Text>
+
                   <TouchableOpacity
                     onPress={() =>
                       this.props.navigation.navigate('ViewNote', {
                         data: item.data,
                       })
                     }>
-                    <Animated.Text
-                      style={{
-                        fontSize: 15,
-                        color: colorConstants.navyblue,
-                        fontWeight: 'bold',
-                        opacity: this.animatedValue,
-                        transform: [
-                          {
-                            translateY: this.animatedValue.interpolate({
-                              inputRange: [0, 1],
-                              outputRange: [0, 20],
-                            }),
-                          },
-                        ],
-                      }}
-                      ellipsizeMode="tail"
-                      numberOfLines={2}>
-                      {item.data}
-                    </Animated.Text>
+                    <View style={styles.viewNote}>
+                      <Text style={styles.viewText}>View Note...</Text>
+                    </View>
                   </TouchableOpacity>
                 </View>
               );
@@ -157,7 +162,7 @@ const styles = StyleSheet.create({
   },
   flatlistview: {marginHorizontal: 20, flex: 1},
   textEdit: {
-    height: 130,
+    height: 140,
     backgroundColor: colorConstants.white,
     padding: 20,
     marginVertical: 8,
@@ -175,6 +180,8 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     padding: 3,
   },
+  viewNote: {flexDirection: 'row-reverse', marginTop: 20},
+  viewText: {color: colorConstants.red, fontSize: 12},
 });
 const mapStateToProps = state => ({
   userData: state.notesReducer.userData,

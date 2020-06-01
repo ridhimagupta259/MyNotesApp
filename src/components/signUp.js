@@ -21,7 +21,7 @@ class SignUp extends React.Component {
       username: '',
       password: '',
       repeatpassword: '',
-      name: 'User',
+      name: 'Ridhima',
       phonenumber: '9996173124',
       hidePassword: true,
       hideLowerPassword: true,
@@ -170,7 +170,7 @@ class SignUp extends React.Component {
                 <Text style={styles.signtxt}>SIGN UP</Text>
               </View>
               {this.props.loading ? (
-                <ActivityIndicator size="large" color={colorConstants.blue} />
+                <ActivityIndicator size="small" color={colorConstants.blue} />
               ) : null}
             </TouchableOpacity>
           </View>
