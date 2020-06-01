@@ -1,6 +1,13 @@
 import React from 'react';
-import {View, SafeAreaView, StyleSheet, Text} from 'react-native';
-import {colorConstants} from '../config/constant';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import {colorConstants, imageConstants} from '../config/constant';
 
 class ViewNote extends React.Component {
   constructor(props) {
@@ -13,6 +20,15 @@ class ViewNote extends React.Component {
     const {data} = this.props.route.params;
     return (
       <SafeAreaView style={styles.container}>
+        <TouchableOpacity
+          onPress={() => {
+            this.props.navigation.goBack();
+          }}>
+          <View style={styles.back}>
+            <Image source={imageConstants.backarrow} />
+            <Text style={styles.backText}>Go Back</Text>
+          </View>
+        </TouchableOpacity>
         <View style={styles.upperView}>
           <Text style={styles.textStyle}>Selected Note is :</Text>
         </View>
@@ -40,6 +56,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: colorConstants.navyblue,
+  },
+  back: {
+    flexDirection: 'row',
+  },
+  backText: {
+    color: colorConstants.navyblue,
+    fontSize: 20,
+    fontWeight: '500',
   },
 });
 export default ViewNote;

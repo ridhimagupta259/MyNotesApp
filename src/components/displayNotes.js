@@ -32,31 +32,12 @@ class DisplayNotes extends React.Component {
   };
   render() {
     const {param1} = this.props.route.params;
-    const {
-      userData,
-      personalCount,
-      workCount,
-      ideasCount,
-      listCount,
-    } = this.props;
-    var count;
+    const {userData} = this.props;
     var newdata = userData.filter(item => {
       if (item.title === param1) {
         return item;
       }
     });
-    if (param1 === 'Personal') {
-      var count = personalCount;
-    }
-    if (param1 === 'Work') {
-      var count = workCount;
-    }
-    if (param1 === 'Ideas') {
-      var count = ideasCount;
-    }
-    if (param1 === 'List') {
-      var count = listCount;
-    }
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity
@@ -72,13 +53,13 @@ class DisplayNotes extends React.Component {
           <View style={styles.titleText}>
             <Text style={styles.titleStyle}>{param1} </Text>
             <View style={styles.numberView}>
-              <Text style={styles.countStyle}> {count}</Text>
+              <Text style={styles.countStyle}> {newdata.length}</Text>
             </View>
           </View>
         </View>
         <View style={styles.flatlistview}>
           <FlatList
-            data={newdata}
+            data={newdata.reverse()}
             renderItem={({item}) => {
               return (
                 <View style={styles.textEdit}>
@@ -198,10 +179,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   userData: state.notesReducer.userData,
   id: state.authenticateReducer.id,
-  ideasCount: state.notesReducer.ideasCount,
-  personalCount: state.notesReducer.personalCount,
-  workCount: state.notesReducer.workCount,
-  listCount: state.notesReducer.listCount,
 });
 const mapDispatchToProps = {
   deleteNotes: deleteNotes,

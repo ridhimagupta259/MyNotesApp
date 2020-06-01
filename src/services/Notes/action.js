@@ -84,6 +84,7 @@ export const displayuserNotes = id => dispatch => {
         console.log('Cannot display data');
       } else {
         console.log('data displayed');
+        dispatch(countCategory(responseJson.response));
         dispatch({
           type: DISPLAY_DATA,
           data: responseJson.response,

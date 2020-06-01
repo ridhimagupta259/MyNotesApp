@@ -4,15 +4,19 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
-  ImageBackground,
   Image,
   View,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {LoginManager} from 'react-native-fbsdk';
-import {authenticateApi} from '../services/Authenticate/action';
+import {LoginManager, AccessToken} from 'react-native-fbsdk';
+import {
+  authenticateApi,
+  toggleSplash,
+  initUser,
+} from '../services/Authenticate/action';
 import {colorConstants, imageConstants} from '../config/constant';
 class Login extends React.Component {
   constructor(props) {
@@ -45,6 +49,10 @@ class Login extends React.Component {
             'Login success with permissions: ' +
               result.grantedPermissions.toString(),
           );
+          // AccessToken.getCurrentAccessToken().then(data => {
+          //   const {accessToken} = data;
+          //   initUser(accessToken);
+          // });
         }
       },
       function(error) {
@@ -68,6 +76,7 @@ class Login extends React.Component {
               style={styles.textbox}
               placeholder={'Username or email address'}
               placeholderTextColor={colorConstants.grey}
+              autoCapitalize="none"
               onChangeText={text => {
                 this.validate(text, 'username');
               }}
@@ -115,6 +124,9 @@ class Login extends React.Component {
                 <Image source={imageConstants.tick} style={styles.tickImage} />
                 <Text style={styles.logtxt}>LOG IN</Text>
               </View>
+              {this.props.loading ? (
+                <ActivityIndicator size="large" color={colorConstants.blue} />
+              ) : null}
             </TouchableOpacity>
           </View>
         </View>
@@ -264,10 +276,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  loading: state.authenticateReducer.loading,
+});
 
 const mapDispatchToProps = {
   authenticateApi: authenticateApi,
+  toggleSplash: toggleSplash,
+  initUser: initUser,
 };
 
 export default connect(

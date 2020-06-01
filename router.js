@@ -8,7 +8,6 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-community/async-storage';
-
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
 import store from './src/services/rootreducer';
@@ -38,9 +37,11 @@ function CustomDrawerContent(props) {
       <DrawerItemList {...props} />
       <DrawerItem
         label="Logout"
-        onPress={() => {
+        onPress={async () => {
           logout();
-          props.navigation.navigate('MainScreen');
+          setTimeout(() => {
+            props.navigation.navigate('MainScreen');
+          }, 1000);
         }}
       />
     </DrawerContentScrollView>
@@ -59,11 +60,11 @@ function myApp() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          {/* <Stack.Screen
+          <Stack.Screen
             options={{headerShown: false}}
             name="Splash"
             component={Splash}
-          /> */}
+          />
           <Stack.Screen
             options={{headerShown: false}}
             name="MainScreen"

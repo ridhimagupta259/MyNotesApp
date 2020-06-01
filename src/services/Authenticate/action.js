@@ -1,9 +1,17 @@
-import {AUTHENTICATE_DATA, CREATE_DATA, TOGGLE_SPLASH} from './constants';
+import {
+  AUTHENTICATE_DATA,
+  CREATE_DATA,
+  TOGGLE_SPLASH,
+  LOGIN_START,
+  LOGIN_SUCCESS,
+} from './constants';
 import config from '../../config/env';
-import AsyncStorage from 'react-native';
 
 export const authenticateApi = (username, password, callback) => dispatch => {
   let loginAPI = config.apiConfig.authenticationApi.loginUserApi;
+  dispatch({
+    type: LOGIN_START,
+  });
   fetch(loginAPI, {
     method: 'POST',
     headers: {
@@ -42,6 +50,9 @@ export const createApi = (
   callback,
 ) => dispatch => {
   let createUser = config.apiConfig.createApi.createUserApi;
+  dispatch({
+    type: LOGIN_START,
+  });
   fetch(createUser, {
     method: 'POST',
     headers: {
@@ -52,7 +63,7 @@ export const createApi = (
       username: username,
       password: password,
       name: name,
-      phonenumber: phonenumber,
+      phoneNumber: phonenumber,
     }),
   })
     .then(response => {
@@ -74,24 +85,39 @@ export const createApi = (
     });
 };
 
-export const toggleSplash = () => async dispatch => {
-  try {
-    const value = await AsyncStorage.getItem('token');
-    console.log(value);
-    if (value !== null) {
-      console.log('togglesplash');
-      dispatch({
-        type: TOGGLE_SPLASH,
-        data: value,
-      });
-    }
-    if (value === null) {
-      dispatch({
-        type: TOGGLE_SPLASH,
-        data: '',
-      });
-    }
-  } catch (error) {
-    console.log('error in getting token', error);
-  }
+export const toggleSplash = value => dispatch => {
+  dispatch({
+    type: TOGGLE_SPLASH,
+    data: value,
+  });
 };
+
+// export const initUser = userinfo => dispatch => {
+//   console.warn(userinfo);
+//   let signUpUrl = config.apiConfig.createApi.createUser;
+//   dispatch({
+//     type: LOGIN_START,
+//   });
+//   fetch(signUpUrl, {
+//     method: 'POST',
+//     headers: {
+//       Accept: 'application/json',
+//       'content-type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       username: userinfo.name,
+//       password: '',
+//       email: userinfo.email,
+//       socialId: userinfo.id,
+//     }),
+//   })
+//     .then(response => response.json())
+//     .then(responseJson => {
+//       if (responseJson.status === true) {
+//         dispatch({
+//           type: LOGIN_SUCCESS,
+//           data: [responseJson.body, userinfo],
+//         });
+//       }
+//     });
+// };

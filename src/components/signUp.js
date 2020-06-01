@@ -4,11 +4,11 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
-  ImageBackground,
   Image,
   View,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {createApi} from '../services/Authenticate/action';
@@ -21,7 +21,7 @@ class SignUp extends React.Component {
       username: '',
       password: '',
       repeatpassword: '',
-      name: 'Ridhima',
+      name: 'User',
       phonenumber: '9996173124',
       hidePassword: true,
       hideLowerPassword: true,
@@ -94,6 +94,7 @@ class SignUp extends React.Component {
               style={styles.textbox}
               placeholder={'Username'}
               placeholderTextColor={colorConstants.grey}
+              autoCapitalize="none"
               onChangeText={text => {
                 this.validate(text, 'username');
               }}
@@ -141,24 +142,36 @@ class SignUp extends React.Component {
           <View style={styles.signUpView}>
             <TouchableOpacity
               onPress={() => {
-                this.props.createApi(
-                  username,
-                  password,
-                  name,
-                  phonenumber,
-                  (status, response, error) => {
-                    if (status) {
-                      navigation.navigate('MyDrawer');
-                    } else {
-                      Alert.alert('Error', 'Wrong Login Credentials');
-                    }
-                  },
-                );
+                if (
+                  this.state.username &&
+                  this.state.password &&
+                  this.state.name &&
+                  this.state.phonenumber
+                ) {
+                  this.props.createApi(
+                    username,
+                    password,
+                    name,
+                    phonenumber,
+                    (status, response, error) => {
+                      if (status) {
+                        navigation.navigate('MyDrawer');
+                      } else {
+                        Alert.alert('Error', 'Wrong Login Credentials');
+                      }
+                    },
+                  );
+                } else {
+                  Alert.alert('Error', 'Wrong Login Credentials');
+                }
               }}>
               <View style={styles.signUpText}>
                 <Image source={imageConstants.tick} style={styles.tickImage} />
                 <Text style={styles.signtxt}>SIGN UP</Text>
               </View>
+              {this.props.loading ? (
+                <ActivityIndicator size="large" color={colorConstants.blue} />
+              ) : null}
             </TouchableOpacity>
           </View>
         </View>
@@ -269,7 +282,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  loading: state.authenticateReducer.loading,
+});
 
 const mapDispatchToProps = {
   createApi: createApi,

@@ -9,7 +9,7 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
-//import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 import {colorConstants, imageConstants} from '../config/constant';
@@ -31,14 +31,6 @@ class Home extends React.Component {
       count: 0,
     };
   }
-  // storeData = async () => {
-  //   console.log('hey' + this.props.id);
-  //   try {
-  //     await AsyncStorage.setItem('header', this.props.id);
-  //   } catch (error) {
-  //     console.warn('error');
-  //   }
-  // };
   onClick() {
     console.log(this.props.userData);
     console.log(this.props.id);
@@ -51,7 +43,7 @@ class Home extends React.Component {
   };
   render() {
     const {personalCount, workCount, ideasCount, listCount, id} = this.props;
-    const {modalVisible, select} = this.state;
+    const {modalVisible} = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upperView}>
@@ -123,6 +115,9 @@ class Home extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
+                this.setState({
+                  category: '',
+                });
                 this.toggleModal(!modalVisible);
               }}>
               <Image source={imageConstants.plus} style={styles.plusImage} />
@@ -212,11 +207,12 @@ class Home extends React.Component {
     );
   }
   componentDidMount() {
-    //this.storeData();
     this.props.displayuserNotes(this.props.id);
-    setTimeout(() => {
-      this.props.countCategory(this.props.userData);
-    }, 1000);
+    try {
+      AsyncStorage.setItem('token', this.props.id);
+    } catch {
+      console.log('Unable to save token');
+    }
   }
 }
 const styles = StyleSheet.create({

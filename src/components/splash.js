@@ -13,32 +13,21 @@ class Splash extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Welcome</Text>
+        <Text style={styles.textStyle}>My Notes Application</Text>
       </View>
     );
   }
-  getData = async () => {
-    const {navigation} = this.props;
-    try {
-      const value = await AsyncStorage.getItem('header');
-      //this.props.toggleSplash();
-      console.log('value' + value);
-      if (value !== null) {
-        //this.props.toggleSplash();
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'MyDrawer'}],
-        });
+  getData = () => {
+    AsyncStorage.getItem('token').then(value => {
+      console.log('token', value);
+
+      if (value != null) {
+        this.props.toggleSplash(value);
+        this.props.navigation.navigate('MyDrawer');
+      } else {
+        this.props.navigation.navigate('MainScreen');
       }
-      if (value === null) {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'MainScreen'}],
-        });
-      }
-    } catch (error) {
-      console.log('no data');
-    }
+    });
   };
   componentDidMount() {
     this.getData();
@@ -51,6 +40,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  textStyle: {
+    fontSize: 30,
+    fontWeight: 'bold',
   },
 });
 const mapStateToProps = state => ({
